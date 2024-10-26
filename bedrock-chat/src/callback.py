@@ -1,5 +1,4 @@
 import requests
-import time
 from langchain_aws import ChatBedrock
 
 # https://python.langchain.com/docs/integrations/llms/bedrock/
