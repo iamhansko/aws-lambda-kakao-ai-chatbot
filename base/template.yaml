@@ -107,10 +107,6 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: "*"
-              - Effect: Allow
-                Action:
-                  - bedrock:*
-                Resource: "*"
   
   LambdaLayer:
     Type: AWS::Serverless::LayerVersion
