@@ -4,8 +4,10 @@ Description: AWS Lambda Kakao AI Chatbot
 
 Mappings:
   ResourceMap:
+    ChatbotLambdaFunction:
+      Name: chatbot-lambda
     CallbackLambdaFunction: 
-      Name: bedrock-drawing-callback-lambda
+      Name: callback-lambda
 
 Globals:
   Function:
@@ -21,6 +23,7 @@ Resources:
   KakaoChatbotLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !FindInMap [ResourceMap, ChatbotLambdaFunction, Name]
       Handler: app.lambda_handler
       Runtime: python3.12
       CodeUri: ./src

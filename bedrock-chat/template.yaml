@@ -4,8 +4,10 @@ Description: AWS Lambda Kakao AI Chatbot
 
 Mappings:
   ResourceMap:
+    ChatbotLambdaFunction:
+      Name: chatbot-lambda
     CallbackLambdaFunction: 
-      Name: bedrock-chat-callback-lambda
+      Name: callback-lambda
 
 Globals:
   Function:
@@ -14,11 +16,14 @@ Globals:
     Environment:
       Variables:
         CALLBACK_LAMBDA_FUNCTION_NAME: !FindInMap [ResourceMap, CallbackLambdaFunction, Name]
+        TEXT_TO_IMAGE_S3_BUCKET_NAME : !Ref TextToImageS3Bucket
+        AWS_REGION_NAME : !Ref AWS::Region
 
 Resources:
   KakaoChatbotLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !FindInMap [ResourceMap, ChatbotLambdaFunction, Name]
       Handler: app.lambda_handler
       Runtime: python3.12
       CodeUri: ./src
@@ -106,6 +111,8 @@ Resources:
               - Effect: Allow
                 Action:
                   - bedrock:*
+                  - translate:*
+                  - s3:*
                 Resource: "*"
   
   LambdaLayer:
@@ -116,6 +123,28 @@ Resources:
       ContentUri: ./layer.zip
       CompatibleRuntimes:
         - python3.12
+  
+  TextToImageS3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+  
+  TextToImageS3BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref TextToImageS3Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub "${TextToImageS3Bucket.Arn}/*"
 
 Outputs:
   KakaoChatbotFunction:
