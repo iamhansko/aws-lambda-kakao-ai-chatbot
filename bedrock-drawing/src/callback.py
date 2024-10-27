@@ -1,7 +1,6 @@
 import requests
 import boto3
 import os
-import random
 from datetime import datetime
 import base64
 import json
@@ -22,17 +21,14 @@ def lambda_handler(event, context):
 
     # https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/bedrock-runtime_example_bedrock-runtime_InvokeModel_StableDiffusion_section.html
     response = boto3.client('bedrock-runtime').invoke_model(
-        modelId='stability.stable-diffusion-xl-v1',
-        # https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/model-parameters-diffusion-1-0-text-image.html 
+        modelId='stability.sd3-large-v1:0',
+        # https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/model-parameters-diffusion-3-text-image.html
         body=json.dumps({
-        'text_prompts': [{'text': english_text}],
-        'style_preset': 'photographic',
-        'seed': random.randint(0, 4294967295),
-        'cfg_scale': 15,
-        'steps': 50,
+        'prompt': english_text,
+        'negative_prompt': '(worst quality), (low quality:1.3), (text:1.8), (logo:1.8), (nsfw), low resolution, deformed, blurred, bad anatomy, disfigured, badly drawn face, mutation, mutated, extra limb, missing limb, blurred, floating limbs, detached limbs, blurred, watermark, bad proportion, cropped image'
         })
     )
-    image_data = base64.b64decode(json.loads(response['body'].read())['artifacts'][0]['base64'])
+    image_data = base64.b64decode(json.loads(response['body'].read().decode('utf-8'))['images'][0])
     image_path = os.path.join('/tmp', 'stability.png')
     with open(image_path, 'wb') as file:
         file.write(image_data)
