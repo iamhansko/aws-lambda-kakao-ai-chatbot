@@ -66,10 +66,6 @@ Resources:
     Properties:
       StageName: v1
       OpenApiVersion: '2.0'
-      Auth:
-        ApiKeyRequired: true
-        UsagePlan:
-          CreateUsagePlan: PER_API
 
   CallbackLambdaFunction:
     Type: AWS::Serverless::Function
