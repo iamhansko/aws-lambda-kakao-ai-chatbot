@@ -20,9 +20,3 @@ sam build & sam deploy --no-confirm-changeset --no-disable-rollback --capabiliti
 
 requests
 ```
-
-## 카카오 비즈니스 챗봇 관리자센터
-```
-헤더값 입력
-x-api-key : YOUR_API_GATEWAY_API_KEY
-```
