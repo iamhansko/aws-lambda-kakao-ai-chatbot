@@ -1,4 +1,4 @@
-# 🧠 Base
+# 🦜 Base
 
 ## Deployment
 ```
@@ -11,14 +11,12 @@ sam build & sam deploy --guided --capabilities CAPABILITY_NAMED_IAM
 sam build & sam deploy --no-confirm-changeset --no-disable-rollback --capabilities CAPABILITY_NAMED_IAM
 ```
 
-## Packages
+## Python Packages
 ```
 # cd base
 # https://docs.aws.amazon.com/ko_kr/lambda/latest/dg/python-layers.html#python-layer-manylinux
-# pip install --platform=manylinux2014_x86_64 --only-binary=:all: requests boto3 langchain_aws -t ./layer/python
+# pip install --platform=manylinux2014_x86_64 --only-binary=:all: requests -t ./layer/python
 # layer/ -> layer.zip
 
-requests
-boto3
-langchain_aws
+- requests
 ```

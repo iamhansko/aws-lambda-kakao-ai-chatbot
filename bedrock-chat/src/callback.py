@@ -2,13 +2,13 @@ import requests
 import json
 import boto3
 
-# https://python.langchain.com/docs/integrations/llms/bedrock/
+# https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html
 def bedrock_chatbot(text):
     response = boto3.client('bedrock-runtime').invoke_model(
         modelId = 'anthropic.claude-3-5-sonnet-20240620-v1:0', 
         body = json.dumps({
             'anthropic_version': 'bedrock-2023-05-31',
-            'messages': [ { 'role': 'user', 'content': text } ],
+            'messages': [ { 'role': 'user', 'content': text } ], # "role" : "user" or "assistant"
             'max_tokens': 2048,
             'temperature': 0.5
         }),
